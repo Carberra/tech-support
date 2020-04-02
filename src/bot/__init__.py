@@ -6,6 +6,8 @@ from discord import Status, Activity, ActivityType
 from discord.ext import commands
 from dotenv import load_dotenv
 
+from src.utils import activity
+
 
 load_dotenv()
 
@@ -56,10 +58,8 @@ class Bot(commands.Bot):
             self.scheduler.start()
             print(f" scheduler started ({len(self.scheduler.get_jobs()):,} job(s) scheduled)")
 
-            # await self.change_presence(activity=Activity(
-            #     name="{} active tickets",
-            #     type=Activity.playing
-            # ))
+            await activity.update(self)
+
             self.ready = True
             print(" bot ready")
 

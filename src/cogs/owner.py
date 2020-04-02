@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 import discord
 from discord.ext import commands
 
@@ -13,7 +15,7 @@ class Owner(commands.Cog):
         if len(cogs) == 0:
             return
 
-        cogs = [f"src.cogs.{cog}" for cog in cogs]
+        cogs = tuple(f"src.cogs.{cog}" for cog in cogs)
 
         success, fail = [], []
 
@@ -28,7 +30,7 @@ class Owner(commands.Cog):
 
     @commands.command()
     async def load(self, ctx, *cogs: str):
-        r = await self.cog_operation(self.bot.load_extension, cogs)
+        r = await self.cog_operation(self.bot.load_extension, *cogs)
         await ctx.send(f"Success: {r[0]} | Fail: {r[1]}")
 
     @commands.command()
@@ -40,6 +42,12 @@ class Owner(commands.Cog):
     async def reload(self, ctx, *cogs: str):
         r = await self.cog_operation(self.bot.reload_extension, *cogs)
         await ctx.send(f"Success: {r[0]} | Fail: {r[1]}")
+
+    @commands.command()
+    async def purge(self, ctx, amount: int = 0):
+        """Purge messages"""
+        after = datetime.now() - timedelta(days=14)
+        await ctx.channel.purge(limit=amount + 1, after=after)
 
     @commands.command()
     async def shutdown(self, ctx):
