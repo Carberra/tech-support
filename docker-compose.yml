@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  techsupport:
+    build: .
+    volumes:
+      - data:/app/data
+    environment:
+      TOKEN: /run/secrets/token
+      GUILD_ID: 626608699942764544
+      SUPPORT_CHANNEL_ID: 695105827601645618
+      TICKET_CATEGORY_ID: 695091841401356358
+      TICKET_POOL_ID: 695247102858625049
+      STAFF_ROLE_ID: 695313975046438923
+      HELPER_ROLE_ID: 680357485608960148
+    secrets:
+      - token
+
+secrets:
+  token:
+    file: ./secrets/token
+
+volumes:
+  data:
