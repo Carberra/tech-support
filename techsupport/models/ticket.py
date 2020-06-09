@@ -122,12 +122,13 @@ class Ticket:
         self.channel = None
 
     async def unsolved(self, *args):
-        agent = args[0]
-
-        await OverwritesUtility.remove(agent, channel=self.channel)
+        try:
+            agent = args[0]
+            await OverwritesUtility.remove(agent, channel=self.channel)
+        except:
+            pass
 
         self.state = TicketState.UNSOLVED
-        self.agents = []
 
         embed = Embed(
             type="rich",
@@ -136,6 +137,9 @@ class Ticket:
             colour=Colour(self.colour)
         )
         embed.set_author(name=self.state)
+
+        self.agents = []
+
         await self.channel.send(self.author.mention, embed=embed)
 
     async def assign(self, *args):
@@ -155,8 +159,8 @@ class Ticket:
         self.agents.remove(agent)
         await OverwritesUtility.remove(agent, channel=self.channel)
 
-        if self.state != TicketState.OPEN:
-            self.state = TicketState.UNASSIGNED
+        if not len(self.agents):
+            await self.unsolved()
 
     async def reject(self, *args):
         self.state = TicketState.REJECTED
