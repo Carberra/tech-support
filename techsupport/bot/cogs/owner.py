@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 
-import discord
 from discord.ext import commands
 
 
@@ -15,44 +14,42 @@ class Owner(commands.Cog):
         if len(cogs) == 0:
             return
 
-        cogs = tuple(f"src.cogs.{cog}" for cog in cogs)
+        cogs = tuple(f"techsupport.bot.cogs.{cog}" for cog in cogs)
 
         success, fail = [], []
-
         for cog in cogs:
             try:
                 function(cog)
                 success.append(cog)
             except Exception as e:
-                fail.append(cog)
+                fail.append((cog, e))
 
-        return (len(success), len(fail))
+        return {"success": success, "fail": fail}
 
     @commands.command()
     async def load(self, ctx, *cogs: str):
         r = await self.cog_operation(self.bot.load_extension, *cogs)
-        await ctx.send(f"Success: {r[0]} | Fail: {r[1]}")
+        await ctx.send(f"Success {len(r['success'])} | Fail {len(r['fail'])}")
 
     @commands.command()
     async def unload(self, ctx, *cogs: str):
         r = await self.cog_operation(self.bot.unload_extension, *cogs)
-        await ctx.send(f"Success: {r[0]} | Fail: {r[1]}")
+        await ctx.send(f"Success {len(r['success'])} | Fail {len(r['fail'])}")
 
     @commands.command()
     async def reload(self, ctx, *cogs: str):
         r = await self.cog_operation(self.bot.reload_extension, *cogs)
-        await ctx.send(f"Success: {r[0]} | Fail: {r[1]}")
+        await ctx.send(f"Success {len(r['success'])} | Fail {len(r['fail'])}")
 
     @commands.command()
     async def purge(self, ctx, amount: int = 0):
-        """Purge messages"""
         after = datetime.now() - timedelta(days=14)
         await ctx.channel.purge(limit=amount + 1, after=after)
 
     @commands.command()
     async def shutdown(self, ctx):
-        self.bot.scheduler.shutdown()
-        await self.bot.logout()
+        await ctx.send("Shutting down...")
+        await self.bot.shutdown()
 
 
 def setup(bot):
