@@ -1,6 +1,3 @@
-from datetime import date, datetime
-
-from discord import File
 from discord.ext import commands
 
 

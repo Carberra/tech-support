@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 import aiofiles
 import aiofiles.os
 
+from discord import File
 from discord.ext import commands
 
 
