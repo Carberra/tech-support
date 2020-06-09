@@ -76,7 +76,7 @@ class Support(commands.Cog):
             await ctx.send("You need to specify the language and provide a problem description.")
 
     @commands.command()
-    async def resolve(self, ctx, state, *, reason):
+    async def resolve(self, ctx, state, *, reason=None):
         if ctx.invoked_with == "raw_reaction":
             ticket = await self.tickets.get_one(message=ctx.message)
         else:
