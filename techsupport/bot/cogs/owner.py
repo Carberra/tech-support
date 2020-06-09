@@ -1,5 +1,8 @@
 from datetime import datetime, timedelta
 
+import aiofiles
+import aiofiles.os
+
 from discord.ext import commands
 
 
@@ -50,6 +53,17 @@ class Owner(commands.Cog):
     async def shutdown(self, ctx):
         await ctx.send("Shutting down...")
         await self.bot.shutdown()
+
+    @commands.command()
+    async def tickets(self, ctx):
+        t = datetime.now().timestamp()
+
+        async with aiofiles.open(f"./data/tickets-{t}.txt", mode="w") as f:
+            await f.write("\n".join(map(repr, self.bot.get_cog("Support").tickets._tickets)))
+
+        await ctx.author.send(content=f"Tickets as at {date.today()}", file=File(f"./data/tickets-{t}.txt"))
+
+        await aiofiles.os.remove(f"./data/tickets-{t}.txt")
 
 
 def setup(bot):
