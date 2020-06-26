@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tech-support"
-version = "1.0.1"
+version = "1.0.2"
 description = "Discord bot for technical support"
 
 license = "BSD-3-Clause"
