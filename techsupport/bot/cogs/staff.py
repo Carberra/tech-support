@@ -9,7 +9,7 @@ class Staff(commands.Cog):
         return commands.has_role("Staff")
 
     @commands.command()
-    async def terminate(self, ctx, reason):
+    async def terminate(self, ctx, *, reason):
         ctx.command = self.bot.get_command("resolve")
         await ctx.invoke(ctx.command, "terminate", reason=reason)
 
