@@ -62,7 +62,7 @@ class Owner(commands.Cog):
         async with aiofiles.open(f"./data/tickets-{t}.txt", mode="w") as f:
             await f.write("\n".join(map(repr, self.bot.get_cog("Support").tickets._tickets)))
 
-        await ctx.author.send(content=f"Tickets as at {date.today()}", file=File(f"./data/tickets-{t}.txt"))
+        await ctx.author.send(content=f"Tickets as at {datetime.now()}", file=File(f"./data/tickets-{t}.txt"))
 
         await aiofiles.os.remove(f"./data/tickets-{t}.txt")
 
