@@ -40,11 +40,11 @@ class Bot(commands.Bot):
     async def process_commands(self, message):
         ctx = await self.get_context(message)
 
-        if self.ready:
-            if ctx.command is not None and ctx.guild is not None:
+        if ctx.command is not None:
+            if self.ready and ctx.guild is not None:
                 await self.invoke(ctx)
-        else:
-            await ctx.send("Not ready to receive commands.")
+            else:
+                await ctx.send("Not ready to receive commands.")
 
     async def on_connect(self):
         print(f"bot connected, latency={self.latency*1000:,.0f} ms")
