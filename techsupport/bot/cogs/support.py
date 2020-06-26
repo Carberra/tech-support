@@ -35,11 +35,14 @@ class Support(commands.Cog):
     @checks.in_channel(Config.SUPPORT_CHANNEL_ID)
     async def support(self, ctx, language, *, description):
         if len(description) > 50:
+            if not (language := await LanguageUtility.resolve(language)):
+                return await ctx.send("You need to specify a valid programming language.")
+
             ticket = Ticket(
                 guild=ctx.guild,
                 author=ctx.author,
                 description=description,
-                language=await LanguageUtility.resolve(language),
+                language=language,
                 created_at=ctx.message.created_at,
             )
             channel = await ticket.create_channel()
