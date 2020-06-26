@@ -1,8 +1,10 @@
+from sys import exc_info, stderr
+
 from discord import PermissionOverwrite
 
 
 class OverwritesUtility:
-    _access = PermissionOverwrite(read_messages=True, send_messages=True, embed_links=True, attach_files=True,)
+    _access = PermissionOverwrite(read_messages=True, send_messages=True, embed_links=True, attach_files=True)
     _no_access = PermissionOverwrite(read_messages=False)
 
     @staticmethod
@@ -10,20 +12,20 @@ class OverwritesUtility:
         try:
             return channel.overwrites
         except:
-            return None
+            return {}
 
     @staticmethod
-    async def set(channel=None, **overwrites):
+    async def set(channel=None, **kwargs):
         try:
-            await channel.edit(overwrites=overwrites)
+            await channel.edit(overwrites=kwargs.get("overwrites", await OverwritesUtility.get(channel=channel)))
         except:
-            pass
+            print(exc_info(), file=stderr)
 
     @staticmethod
-    async def add(channel=None, **overwrites):
+    async def add(channel=None, **kwargs):
         ows = await OverwritesUtility.get(channel=channel)
 
-        ows.update(overwrites.get("overwrites", None))
+        ows.update(kwargs.get("overwrites", {}))
 
         await OverwritesUtility.set(channel=channel, overwrites=ows)
 
