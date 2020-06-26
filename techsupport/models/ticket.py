@@ -81,6 +81,7 @@ class Ticket:
             overwrites={
                 self.guild.me: OverwritesUtility._access,
                 self.guild.default_role: OverwritesUtility._no_access,
+                self.guild.get_role(Config.STAFF_ROLE_ID): OverwritesUtility._access,
                 self.author: OverwritesUtility._access,
             },
             category=self.guild.get_channel(Config.TICKET_CATEGORY_ID),
