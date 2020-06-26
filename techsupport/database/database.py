@@ -38,7 +38,7 @@ class Database:
 
     async def get_all(self):
         c = await self._conn.cursor()
-        await c.execute("SELECT * FROM tickets WHERE state_name != 'SOLVED'")
+        await c.execute("SELECT * FROM tickets WHERE state_name NOT IN ('SOLVED', 'REJECTED', 'TERMINATED', 'ABANDONED')")
 
         return await c.fetchall()
 
